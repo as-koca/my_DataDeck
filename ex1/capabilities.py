@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from ex1.creature import Creature as Creature
-from ex1.creature import CreatureFactory as CreatureFactory
+from ex0.creature import Creature
+from ex0.creature import CreatureFactory
 
 
 class HealCapability(ABC):
@@ -32,12 +32,10 @@ class Bloomelle(Creature, HealCapability):
 
 
 class HealingCreatureFactory(CreatureFactory):
-    @staticmethod
-    def create_base() -> Sproutling:
+    def create_base(self) -> Sproutling:
         return Sproutling()
 
-    @staticmethod
-    def create_evolved() -> Bloomelle:
+    def create_evolved(self) -> Bloomelle:
         return Bloomelle()
 
 
@@ -93,10 +91,8 @@ class Morphagon(Creature, TransformCapability):
 
 
 class TransformCreatureFactory(CreatureFactory):
-    @staticmethod
-    def create_base() -> Shiftling:
+    def create_base(self) -> Shiftling:
         return Shiftling()
 
-    @staticmethod
-    def create_evolved() -> Morphagon:
+    def create_evolved(self) -> Morphagon:
         return Morphagon()

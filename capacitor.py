@@ -20,7 +20,7 @@ if __name__ == "__main__":
     transform_fact = caps.TransformCreatureFactory()
     base1 = transform_fact.create_base()
     evolved1 = transform_fact.create_evolved()
-    print("\nTesting Creature with transform capabilty")
+    print("\nTesting Creature with transform capability")
     print("base:")
     print(base1.describe())
     print(base1.attack())

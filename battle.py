@@ -4,9 +4,9 @@ from ex0 import FlameFactory, AquaFactory, CreatureFactory
 
 
 def battle(c1: CreatureFactory, c2: CreatureFactory) -> None:
-    f = FlameFactory.create_base()
-    w = AquaFactory.create_base()
-    print(f"{f.describe()}\nvs.\n{w.describe()}")
+    f = c1.create_base()
+    w = c2.create_base()
+    print(f"{f.describe()}\nvs.\n{w.describe()}\nfight!")
     print(f.attack())
     print(w.attack())
 
