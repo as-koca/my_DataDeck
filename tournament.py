@@ -1,39 +1,44 @@
 #!/usr/bin/env python3
 
 import ex2
-from ex2 import deck as deck
+from ex2 import ex1
 from typing import Any
 
 
 def battle(opponents: list[
-        tuple[deck.CreatureFactory, ex2.BattleStrategy]]) -> None:
+        tuple[ex1.CreatureFactory, ex2.BattleStrategy]]) -> None:
     print("*** Tournament ***")
-    print(f"{len(opponents)} opponents involved\n")
+    print(f"{len(opponents)} opponents involved")
 
     i = 0
-    while i < len(opponents) - 1:
-        print("* Battle *\n")
+    j = 1
+    while i < len(opponents):
         j = i + 1
-        opp = opponents[i]
-        op = opp[0].create_base()
-        print(op.describe())
-        print("vs.")
-        while (j < len(opponents) - i):
-            oop1 = opponents[j]
-            op1 = oop1[0].create_base()
-            print(op1.describe())
+        while j < len(opponents):
+            base0 = opponents[i][0].create_base()
+            base1 = opponents[j][0].create_base()
+            print("\n* Battle *")
+            print(f"{base0.describe()} vs. {base1.describe()}")
             print("now fight!")
-            opp[1].act(op)
-            oop1[1].act(op1)
+            try:
+                opponents[i][1].act(base0)
+            except ex2.BattleError as e:
+                print(f"Battle error, aborting tournament: {e}")
+                return
+            try:
+                opponents[j][1].act(base1)
+            except ex2.BattleError as e:
+                print(f"Battle error, aborting tournament: {e}")
+                return
             j += 1
         i += 1
 
 
 if __name__ == "__main__":
-    flame = deck.FlameFactory()
-    sprout = deck.HealingCreatureFactory()
-    water = deck.AquaFactory()
-    morph = deck.TransformCreatureFactory()
+    flame = ex1.FlameFactory()
+    sprout = ex1.HealingCreatureFactory()
+    water = ex1.AquaFactory()
+    morph = ex1.TransformCreatureFactory()
 
     normal = ex2.NormalStrategy()
     aggro = ex2.AggressiveStrategy()
@@ -47,5 +52,9 @@ if __name__ == "__main__":
     print("\nTournament 1 (error)")
     print("[ (Flameling+Aggressive), (Healing+Defensive) ]")
     test2: list[Any] = [(flame, aggro), (sprout, defense)]
-    battle(test1)
-    print(aggro.act(flame))
+    battle(test2)
+
+    print("\nTournament 3 (multiple)")
+    print("[ (Aquabub+Normal), (Healing+Defensive), (Transform+Aggressive) ]")
+    test3: list[Any] = [(water, normal), (sprout, defense), (morph, aggro)]
+    battle(test3)

@@ -4,13 +4,18 @@ import ex1 as deck
 from ex1.capabilities import Shiftling, Morphagon, Sproutling, Bloomelle
 
 
-class AggressiveStrategyError(Exception):
+class BattleError(Exception):
+    def __init__(self, msg: str = ''):
+        super().__init__(msg)
+
+
+class AggressiveStrategyError(BattleError):
     def __init__(self, name: str) -> None:
         super().__init__(
             f"Invalid creature {name} for this aggressive strategy")
 
 
-class DefensiveStrategyError(Exception):
+class DefensiveStrategyError(BattleError):
     def __init__(self, name: str) -> None:
         super().__init__(
             f"Invalid creature {name} for this defensive strategy")
@@ -35,37 +40,28 @@ class NormalStrategy(BattleStrategy):
 
 
 class AggressiveStrategy(BattleStrategy):
-    def act(self, creature: Shiftling | Morphagon) -> None:
-        try:
+    def act(self, creature: Any) -> None:
+        if not self.is_valid(creature):
+            raise AggressiveStrategyError(creature.name)
+        else:
             print(creature.transform())
             print(creature.attack())
             print(creature.revert())
-        except Exception as e:
-            # When i pass my custom error it doesnt print the except
-            # it just raises AttributeError???
-            print(f"Battle error, aborting tournament: {e}")
 
-    def is_valid(self, creature: Shiftling | Morphagon) -> bool:
-        try:
-            if creature.is_transformed:
-                pass
-        except Exception:
+    def is_valid(self, creature: Any) -> bool:
+        if not isinstance(creature, (Shiftling | Morphagon)):
             return False
         return True
 
 
 class DefensiveStrategy(BattleStrategy):
-    def act(self, creature: Sproutling | Bloomelle) -> None:
-        try:
-            s: str = creature.heal()
-            print(creature.attack())
-            print(s)
-        except DefensiveStrategyError as e:
-            print(f"Battle error, aborting tournament: {e}")
+    def act(self, creature: Any) -> None:
+        if not self.is_valid(creature):
+            raise DefensiveStrategyError(creature.name)
+        print(creature.attack())
+        print(creature.heal())
 
-    def is_valid(self, creature: Sproutling | Bloomelle) -> bool:
-        try:
-            creature.heal()
-        except DefensiveStrategyError:
+    def is_valid(self, creature: Any) -> bool:
+        if not isinstance(creature, (Sproutling | Bloomelle)):
             return False
         return True
